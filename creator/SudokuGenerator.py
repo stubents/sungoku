@@ -27,7 +27,6 @@ class SudokuGenerator:
             for j in range(81):
                 left_over_nums.append(0 if j in to_remove_idx else nums[j])
             new_sudoku = Sudoku(left_over_nums)
-            #print(f"up:   {i}")
             if UniquenessChecker(new_sudoku).is_unique():
                 self.grid = new_sudoku
                 return
@@ -36,7 +35,6 @@ class SudokuGenerator:
         self.remove_fast_path()
         unnecessary = find_random_unnecessary_field(self.grid)
         while not unnecessary == -1:
-            #print(f"down: {self.grid.number_of_hints()}")
             self.grid.sudoku_nums[unnecessary] = 0
             unnecessary = find_random_unnecessary_field(self.grid)
         return self.grid
