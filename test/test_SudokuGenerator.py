@@ -10,7 +10,6 @@ class TestSudokuGenerator(TestCase):
 
     def test_generate_grid(self):
         grid = SudokuGenerator.generate_grid()
-        print(grid)
         self.assertFalse(grid.has_contradictions())
 
     def test_find_unnecessary_fields_on_minial_sudoku_returns_nothing(self):

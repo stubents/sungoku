@@ -65,5 +65,6 @@ class UniquenessChecker:
             raise ValueError("No valid solution")
         return self.unique
 
-
+def check_uniqueness(sudoku):
+    return UniquenessChecker(sudoku).is_unique()
 

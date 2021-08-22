@@ -6,7 +6,8 @@ import sys
 
 from Sudoku import Sudoku
 from creator.Evaluator import evaluate_difficultly
-from creator.SudokuGenerator import SudokuGenerator
+from creator.SudokuGenerator import SudokuGenerator, find_random_unnecessary_field
+from creator.UniquenessChecker import check_uniqueness
 from solver.CombinedSolver import CombinedSolver
 
 csv_writer = None
@@ -31,7 +32,15 @@ def merge_string_lists(first, second):
     return result
 
 
-def write_pretty(unsolved, solved):
+def is_unique(sudoku):
+    return 'yes' if check_uniqueness(sudoku) else 'no'
+
+
+def is_minimal(sudoku):
+    return 'yes' if find_random_unnecessary_field(sudoku) == -1 else 'no'
+
+
+def write_pretty(unsolved, solved, analyse=False):
     unsolved_lines = str(unsolved).splitlines() if unsolved is not None else []
     solved_lines = str(solved).splitlines() if solved is not None else []
     for line in merge_string_lists(unsolved_lines, solved_lines):
@@ -39,15 +48,20 @@ def write_pretty(unsolved, solved):
     if unsolved is not None:
         print('\nNumber of hints: ' + str(unsolved.number_of_hints()))
         print('Difficulty: ' + str(evaluate_difficultly(unsolved)))
+    if analyse:
+        print('Unique: ' + is_unique(unsolved))
+        print('Minimal: ' + is_minimal(unsolved))
     print('\n')
 
 
-def get_csv_writer(unsolved, solved):
+def get_csv_writer(unsolved, solved, analyse=False):
     global csv_writer
     if csv_writer is None:
         columns = []
         if unsolved is not None:
             columns.extend(['quiz', 'num_hints', 'difficulty'])
+        if analyse:
+            columns.extend(['unique', 'minimal'])
         if solved is not None:
             columns.append('answer')
         csv_writer = csv.DictWriter(sys.stdout, fieldnames=columns, extrasaction='ignore')
@@ -55,11 +69,13 @@ def get_csv_writer(unsolved, solved):
     return csv_writer
 
 
-def write_as_csv(unsolved, solved):
-    writer = get_csv_writer(unsolved, solved)
+def write_as_csv(unsolved, solved, analyse=False):
+    writer = get_csv_writer(unsolved, solved, analyse)
     writer.writerow({'quiz': unsolved.serialize() if unsolved is not None else '',
                      'num_hints': unsolved.number_of_hints() if unsolved is not None else '',
                      'difficulty': evaluate_difficultly(unsolved) if unsolved is not None else '',
+                     'unique': is_unique(unsolved) if analyse and unsolved is not None else '',
+                     'minimal': is_minimal(unsolved) if analyse and unsolved is not None else '',
                      'answer': solved.serialize() if solved is not None else ''})
 
 
@@ -75,13 +91,14 @@ def create(arguments):
 
 def solve_input(arguments):
     reader = csv.DictReader(sys.stdin)
+    include = arguments.include_quiz or arguments.analyse
     for row in reader:
         unsolved = Sudoku.deserialize(row['quiz'])
         solved = solve(unsolved)
         if arguments.pretty:
-            write_pretty(unsolved if arguments.include_quiz else None, solved)
+            write_pretty(unsolved if include else None, solved, arguments.analyse)
         else:
-            write_as_csv(unsolved if arguments.include_quiz else None, solved)
+            write_as_csv(unsolved if include else None, solved, arguments.analyse)
 
 
 if __name__ == '__main__':
@@ -96,7 +113,11 @@ if __name__ == '__main__':
     solve_parser = subparsers.add_parser('solve')
     solve_parser.add_argument('-p', '--pretty', action='store_true', help='prints a formatted field instead of csv')
     solve_parser.add_argument('-i', '--include-quiz', action='store_true', help='Includes the unsolved sudoku in the output')
+    solve_parser.add_argument('-a', '--analyse', action='store_true', help='Same as --include-quiz but with additional information about the sudoku')
     solve_parser.set_defaults(func=solve_input)
 
     args = parser.parse_args()
-    args.func(args)
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        print(parser.format_help())
