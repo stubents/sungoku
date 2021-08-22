@@ -1,8 +1,5 @@
-
-import time
 import random
 
-from Sudoku import Sudoku
 from solver.BaseSolver import BaseSolver
 
 

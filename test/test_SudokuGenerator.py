@@ -1,8 +1,6 @@
-import cProfile
 import copy
 from unittest import TestCase
 
-from Sudoku import Sudoku
 from creator.SudokuGenerator import SudokuGenerator, find_unnecessary_fields, find_random_unnecessary_field
 from solver.CombinedSolver import CombinedSolver
 from test.ExampleSudokus import ExampleSudokus

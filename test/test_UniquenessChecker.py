@@ -1,5 +1,4 @@
 import copy
-import unittest
 from unittest import TestCase
 
 from Sudoku import Sudoku

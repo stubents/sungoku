@@ -1,5 +1,4 @@
 from solver.BaseSolver import BaseSolver
-import time
 
 
 class LogicSolver(BaseSolver):

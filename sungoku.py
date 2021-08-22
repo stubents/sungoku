@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
-import sys
 import csv
+import sys
 
 from Sudoku import Sudoku
+from creator.Evaluator import evaluate_difficultly
 from creator.SudokuGenerator import SudokuGenerator
 from solver.CombinedSolver import CombinedSolver
 
@@ -37,6 +38,7 @@ def write_pretty(unsolved, solved):
         print(line)
     if unsolved is not None:
         print('\nNumber of hints: ' + str(unsolved.number_of_hints()))
+        print('Difficulty: ' + str(evaluate_difficultly(unsolved)))
     print('\n')
 
 
@@ -45,7 +47,7 @@ def get_csv_writer(unsolved, solved):
     if csv_writer is None:
         columns = []
         if unsolved is not None:
-            columns.extend(['quiz', 'num_hints'])
+            columns.extend(['quiz', 'num_hints', 'difficulty'])
         if solved is not None:
             columns.append('answer')
         csv_writer = csv.DictWriter(sys.stdout, fieldnames=columns, extrasaction='ignore')
@@ -57,6 +59,7 @@ def write_as_csv(unsolved, solved):
     writer = get_csv_writer(unsolved, solved)
     writer.writerow({'quiz': unsolved.serialize() if unsolved is not None else '',
                      'num_hints': unsolved.number_of_hints() if unsolved is not None else '',
+                     'difficulty': evaluate_difficultly(unsolved) if unsolved is not None else '',
                      'answer': solved.serialize() if solved is not None else ''})
 
 
