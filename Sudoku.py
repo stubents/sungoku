@@ -3,19 +3,24 @@ class Sudoku:
         assert len(sudoku_nums) == 81
         self.sudoku_nums = sudoku_nums
 
-    def __repr__(self):
+    def __str__(self):
         res = ''
         for y in range(9):
             for x in range(9):
                 res += str(self.get(x, y))
-                res += ' '
+
                 if x == 8:
                     res += '\n'
                 elif x % 3 == 2:
-                    res += '| '
+                    res += ' | '
+                else:
+                    res += ' '
             if y % 3 == 2 and y != 8:
                 res += '- - - + - - - + - - -\n'
         return res.replace('0', ' ')
+
+    def __repr__(self):
+        return str(self.sudoku_nums)
 
     def __eq__(self, other):
         if isinstance(other, Sudoku):
