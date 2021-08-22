@@ -40,10 +40,14 @@ class TestSudokuGenerator(TestCase):
 
     def test_generate_sudoku(self):
         generator = SudokuGenerator()
+
         sudoku = generator.generate()
-        print(sudoku.serialize())
+
         self.assertTrue(17 <= sudoku.number_of_hints() <= 40, 'Hints: ' + str(sudoku.number_of_hints()) + '\n' + str(sudoku))
         self.assertTrue(CombinedSolver.from_sudoku(sudoku).solve())
         self.assertFalse(sudoku.has_contradictions())
-        print(sudoku)
-        print(sudoku.number_of_hints())
+
+    def test_minimum_hints(self):
+        generator = SudokuGenerator(41)
+        sudoku = generator.generate()
+        self.assertEqual(sudoku.number_of_hints(), 41)

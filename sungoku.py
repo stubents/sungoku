@@ -65,7 +65,7 @@ def write_as_csv(unsolved, solved):
 
 def create(arguments):
     for _ in range(arguments.number):
-        generated = SudokuGenerator().generate()
+        generated = SudokuGenerator(arguments.min_hints).generate()
 
         if arguments.pretty:
             write_pretty(generated, None)
@@ -89,6 +89,7 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(help='hello')
     create_parser = subparsers.add_parser('create')
     create_parser.add_argument('-n', '--number', type=int, default=1, help='specifies the number of sudokus to be created')
+    create_parser.add_argument('-m', '--min-hints', type=int, default=0, help='generate sudokus that have at least the specified number of hints')
     create_parser.add_argument('-p', '--pretty', action='store_true', help='prints a formatted field instead of csv')
     create_parser.set_defaults(func=create)
 

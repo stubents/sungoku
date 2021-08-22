@@ -7,7 +7,8 @@ from solver.BruteForceSolver import BruteForceSolver
 
 class SudokuGenerator:
 
-    def __init__(self):
+    def __init__(self, minimum_hints=0):
+        self.minimum_hints = minimum_hints
         self.grid = self.generate_grid()
         self.fast_lane_initial_remove = 35
 
@@ -34,7 +35,7 @@ class SudokuGenerator:
     def generate(self):
         self.remove_fast_path()
         unnecessary = find_random_unnecessary_field(self.grid)
-        while not unnecessary == -1:
+        while not unnecessary == -1 and self.grid.number_of_hints() > self.minimum_hints:
             self.grid.sudoku_nums[unnecessary] = 0
             unnecessary = find_random_unnecessary_field(self.grid)
         return self.grid
