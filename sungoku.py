@@ -87,6 +87,7 @@ def create(arguments):
             write_pretty(generated, None)
         else:
             write_as_csv(generated, None)
+        sys.stdout.flush()
 
 
 def solve_input(arguments):
