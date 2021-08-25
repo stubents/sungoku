@@ -19,12 +19,3 @@ class ExampleSudokus:
     MISC_2 = [Sudoku.deserialize('700800000080050400060009000000700901105080703804003000000300060002060010000008005'),
               Sudoku.deserialize('759834126283156479461279538326745981195682743874913652548391267932567814617428395')]
 
-
-def replace_nth_hint(sudoku, n, value):
-    num_hint = 0
-    for i in range(81):
-        if sudoku.sudoku_nums[i] != 0:
-            num_hint += 1
-            if num_hint == n:
-                sudoku.sudoku_nums[i] = value
-                return

@@ -36,6 +36,11 @@ Solve a list of sudokus from a file and check if it is minimal and a unique solu
 ```
 ./sungoku.py solve -a  < some_file.csv
 ```
+Try to solve sudokus from some other dodgy text-based file format:
+```
+grep -o "[0-9]\{81\}" some_file.txt | xargs -n1 ./sungoku.py solve -i -p -s
+```
+
 Do a whole Sunday afternoon worth of sudokus within a matter of seconds, so you can go back and watch your favourite sitcom:
 ```
 ./sungoku.py create -n 8 | ./sungoku.py solve -p > /dev/null

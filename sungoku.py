@@ -90,16 +90,23 @@ def create(arguments):
         sys.stdout.flush()
 
 
-def solve_input(arguments):
-    reader = csv.DictReader(sys.stdin)
+def write_solution(arguments, unsolved):
+    solved = solve(unsolved)
     include = arguments.include_quiz or arguments.analyse
-    for row in reader:
-        unsolved = Sudoku.deserialize(row['quiz'])
-        solved = solve(unsolved)
-        if arguments.pretty:
-            write_pretty(unsolved if include else None, solved, arguments.analyse)
-        else:
-            write_as_csv(unsolved if include else None, solved, arguments.analyse)
+    if arguments.pretty:
+        write_pretty(unsolved if include else None, solved, arguments.analyse)
+    else:
+        write_as_csv(unsolved if include else None, solved, arguments.analyse)
+
+
+def solve_input(arguments):
+    if arguments.sudoku is not None:
+        write_solution(arguments, Sudoku.deserialize(arguments.sudoku))
+    else:
+        reader = csv.DictReader(sys.stdin)
+        for row in reader:
+            unsolved = Sudoku.deserialize(row['quiz'])
+            write_solution(arguments, unsolved)
 
 
 if __name__ == '__main__':
@@ -115,6 +122,7 @@ if __name__ == '__main__':
     solve_parser.add_argument('-p', '--pretty', action='store_true', help='prints a formatted field instead of csv')
     solve_parser.add_argument('-i', '--include-quiz', action='store_true', help='Includes the unsolved sudoku in the output')
     solve_parser.add_argument('-a', '--analyse', action='store_true', help='Same as --include-quiz but with additional information about the sudoku')
+    solve_parser.add_argument('-s', '--sudoku', help='A single sudoku to solve (instead of reading from stdin')
     solve_parser.set_defaults(func=solve_input)
 
     args = parser.parse_args()
