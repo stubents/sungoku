@@ -41,7 +41,10 @@ class Sudoku:
         assert len(sudoku_str) == 81
         nums = []
         for char in sudoku_str:
-            nums.append(int(char))
+            if char in "._-":
+                nums.append(0)
+            else:
+                nums.append(int(char))
         return Sudoku(nums)
 
     def get(self, x, y):
