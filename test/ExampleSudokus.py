@@ -1,4 +1,4 @@
-from Sudoku import Sudoku
+from model.Sudoku import Sudoku
 
 
 class ExampleSudokus:

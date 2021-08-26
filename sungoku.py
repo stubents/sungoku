@@ -4,7 +4,7 @@ import argparse
 import csv
 import sys
 
-from Sudoku import Sudoku
+from model.Sudoku import Sudoku
 from creator.Evaluator import evaluate_difficultly
 from creator.SudokuGenerator import SudokuGenerator, find_random_unnecessary_field
 from creator.UniquenessChecker import check_uniqueness

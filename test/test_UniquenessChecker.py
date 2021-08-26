@@ -1,7 +1,7 @@
 import copy
 from unittest import TestCase
 
-from Sudoku import Sudoku
+from model.Sudoku import Sudoku
 from creator.UniquenessChecker import UniquenessChecker
 from test.ExampleSudokus import ExampleSudokus
 

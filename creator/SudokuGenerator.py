@@ -1,6 +1,6 @@
 import random
 
-from Sudoku import Sudoku
+from model.Sudoku import Sudoku
 from creator.UniquenessChecker import UniquenessChecker
 from solver.BruteForceSolver import BruteForceSolver
 
